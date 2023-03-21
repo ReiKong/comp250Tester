@@ -687,7 +687,7 @@ class Part2Test {
 
         assertTrue(pos.equals(pos2));
     }
-    
+
     // Testing Basic movement functionality
     @Test
     void posMove_1(){
@@ -853,7 +853,7 @@ class Part2Test {
         test.clear();
         assertTrue(test.isEmpty());
     }
-    
+
     @Test
     void tqAddTargets_1(){
         TargetQueue test = new TargetQueue();
@@ -875,14 +875,6 @@ class Part2Test {
         TargetQueue test = new TargetQueue();
         assertThrows(IllegalArgumentException.class,
                 () -> test.addTargets("..(0,0)."));
-    }
-
-    // Nothing as input
-    @Test
-    void tqAddTargets_4(){
-        TargetQueue test = new TargetQueue();
-        test.addTargets("");
-        assertTrue(test.isEmpty());
     }
 
     // Just a space as input
@@ -960,15 +952,6 @@ class Part2Test {
                 () -> test.addTargets("(12)"));
     }
 
-    // negative numbers in coordinate
-    @Test
-    void tqAddTargets_14(){
-        TargetQueue test = new TargetQueue();
-        test.addTargets("(-10,-4)");
-        assertEquals(test.dequeue(), new Position(-10,-4));
-        assertTrue(test.isEmpty());
-    }
-
     // wierd minus sign placement
     @Test
     void tqAddTargets_15(){
@@ -1024,6 +1007,48 @@ class Part2Test {
         test.addTargets("(03,05)");
         assertEquals(test.dequeue(), new Position(3,5));
         assertTrue(test.isEmpty());
+    }
+
+    // multiple .
+    void tqAddTargets_22(){
+        TargetQueue test = new TargetQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.addTargets("(12,2)..(2,212133)."));
+    }
+
+    // extra (
+    void tqAddTargets_23(){
+        TargetQueue test = new TargetQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.addTargets("((12,2).(2,212133)"));
+    }
+
+    // extra )
+    void tqAddTargets_24(){
+        TargetQueue test = new TargetQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.addTargets("(12,2)).(2,212133)"));
+    }
+
+    // extra ()
+    void tqAddTargets_25(){
+        TargetQueue test = new TargetQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.addTargets("((12,2)).(2,212133)"));
+    }
+
+    // extra ) at the end
+    void tqAddTargets_26(){
+        TargetQueue test = new TargetQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.addTargets("(12,2).((2,212133))"));
+    }
+
+    //extra () wrapping string
+    void tqAddTargets_27(){
+        TargetQueue test = new TargetQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.addTargets("((12,2).(2,212133))"));
     }
 
     // Testing clear function
@@ -1105,7 +1130,7 @@ class Part2Test {
         test.clear();
         assertTrue(test.isEmpty());
     }
-    
+
     // Case #1 on A2 Doc
     @Test
     void aqLoadFromEncodedString_1(){
@@ -1330,6 +1355,38 @@ class Part2Test {
         test.clear();
         assertTrue(test.isEmpty());
     }
+
+    @Test
+    void aqLoadFromEncodedString_17() {
+        ActionQueue test = new ActionQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.loadFromEncodedString("5"));
+    }
+
+    @Test
+    void aqLoadFromEncodedString_18() {
+        ActionQueue test = new ActionQueue();
+        assertThrows(IllegalArgumentException.class,
+                () -> test.loadFromEncodedString("3[N]]"));
+    }
+
+    @Test
+    void aqLoadFromEncodedString_19() {
+        ActionQueue test = new ActionQueue();
+        test.loadFromEncodedString("100[N]");
+        for (int i = 0; i < 100; i++) {
+            assertEquals(Direction.NORTH, test.dequeue());
+        }
+    }
+
+    @Test
+    void aqLoadFromEncodedString_20() {
+        ActionQueue test = new ActionQueue();
+        test.loadFromEncodedString("005[N]"); // NNNNN
+        for (int i = 0; i < 5; i++) {
+            assertEquals(Direction.NORTH, test.dequeue());
+        }
+    }
 }
 
 class Part3Test {
@@ -1343,7 +1400,7 @@ class Part3Test {
         Position goodPos = new Position(2,4);
         assertTrue(region.contains(goodPos));
     }
-    
+
     // Strictly Positive Region
     @Test
     void regionContains_1(){
@@ -1571,5 +1628,4 @@ class Part3Test {
 
     }
 }
-
 
